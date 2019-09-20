@@ -1,26 +1,26 @@
 #!/bin/sh
 
 # new profile (requires user interaction)
-#firefox -no-remote -ProfileManager 2>/dev/null
+firefox -no-remote -ProfileManager 2>/dev/null
 
 # ask user for profile name
 echo -n "Enter name of new Firefox profile: "
 read NAME
 
-# makes variable with diretory
-
-DIR=~/.mozilla/firefox/????????.$NAME
-
 # exits if profile does not exist
-[ ! -d $DIR ] && echo "Firefox profile $NAME does not exist" && exit 1
+[ ! -d ~/.mozilla/firefox/????????.$NAME ] && echo "Firefox profile $NAME does not exist" && exit 1
 
-rm -rf $DIR/*
+# creates directory var
+DIR=$(file ~/.mozilla/firefox/????????.$NAME | sed 's/: directory//')
+
+# clears profile
+rm -rf ${DIR}/*
 
 # get newest version of ghacks user.js file
-wget https://raw.githubusercontent.com/ghacksuserjs/ghacks-user.js/master/user.js -O $DIR/user.js
+wget https://raw.githubusercontent.com/ghacksuserjs/ghacks-user.js/master/user.js -O ${DIR}/user.js 2>/dev/null
 
 # append custom overrides to user.js
-cat << _EOF_ >> $DIR/user.js
+cat << _EOF_ >> ${DIR}/user.js
 /* 0402: disable binaries NOT in Safe Browsing local lists being checked
  * This is a real-time check with Google services
  * [SETUP-SECURITY] If you do not understand this, or if you want this protection, then override it ***/
