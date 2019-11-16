@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # new profile (requires user interaction)
+echo "Create a new Firefox profile. Remember the name!"
 firefox -no-remote -ProfileManager 2>/dev/null
 
 # ask user for profile name
@@ -11,7 +12,7 @@ read NAME
 [ ! -d ~/.mozilla/firefox/????????.$NAME ] && echo "Firefox profile $NAME does not exist" && exit 1
 
 # creates directory var
-DIR=$(file ~/.mozilla/firefox/????????.$NAME | sed 's/: directory//')
+DIR=$(find ~/.mozilla/firefox/ -name "????????.$NAME")
 
 # clears profile
 rm -rf ${DIR}/*
